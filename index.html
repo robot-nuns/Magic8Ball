@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Magic 8 Ball</title>
     <style>
-        /* Base Styles & Mobile Readability */
+/* Base Styles & Lighter Background */
         body {
             margin: 0;
             padding: 0;
-            background-color: #121212;
-            color: #ffffff;
+            /* A soft slate-grey radial gradient */
+            background: radial-gradient(circle at center, #eceff1 0%, #90a4ae 100%);
+            color: #333333;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             display: flex;
             flex-direction: column;
@@ -31,10 +32,11 @@
             justify-content: flex-end;
         }
 
+        /* Adjusted About Button for Light Background */
         .about-btn {
             background: transparent;
-            color: #aaaaaa;
-            border: 1px solid #aaaaaa;
+            color: #455a64;
+            border: 1px solid #455a64;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
@@ -43,8 +45,9 @@
         }
 
         .about-btn:hover {
-            color: #ffffff;
-            border-color: #ffffff;
+            color: #111111;
+            border-color: #111111;
+            background: rgba(255,255,255,0.2);
         }
 
         /* Magic 8 Ball CSS Art */
@@ -53,18 +56,37 @@
             margin-bottom: 40px;
         }
 
+        /* Updated: Richer 3D Shadows for Light Background */
         .eight-ball {
             width: 280px;
             height: 280px;
-            background: radial-gradient(circle at 35% 25%, #555555, #000000 60%);
+            background: radial-gradient(circle at 35% 25%, #444444, #050505 60%, #000000 100%);
             border-radius: 50%;
-            box-shadow: inset -15px -15px 30px rgba(0,0,0,0.9), 10px 15px 30px rgba(0,0,0,0.6);
+            /* Softer inset shadow, much stronger drop shadow so it grounds the ball */
+            box-shadow: inset -10px -10px 25px rgba(0,0,0,0.8), 15px 25px 40px rgba(0,0,0,0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
         }
 
+        /* NEW: The Glossy Reflection Highlight */
+        .eight-ball::before {
+            content: "";
+            position: absolute;
+            top: 8px;
+            left: 20px;
+            width: 130px;
+            height: 65px;
+            border-radius: 50%;
+            /* A semi-transparent white curve that fades out */
+            background: linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.02));
+            transform: rotate(-25deg);
+            pointer-events: none; /* Ensures the gloss doesn't block interactions */
+            z-index: 2;
+        }
+
+        /* Ensure window sits below the gloss for maximum realism */
         .window {
             width: 140px;
             height: 140px;
@@ -76,6 +98,7 @@
             align-items: center;
             position: relative;
             box-shadow: inset 0 0 15px rgba(0,0,0,1);
+            z-index: 1; 
         }
 
         /* The white circle with the 8 */
@@ -241,11 +264,9 @@
             <p>Focus on your question, click the button, and let the universe decide your fate.</p>
             <p><strong>Contact:</strong><br>
                A product of TRI-Corporation.<br>
-               tri-corp-tinkerer@pm.me<br>               
+               tri-corp-tinkerer@pm.me<br>
 			   ...<br>
-			   Use responsibly... or not...<br>
-               ...<br>
-               Version: 1.0, 2026-09-02
+			   Use responsibly... or not...               
 			   </p>
         </div>
     </div>
