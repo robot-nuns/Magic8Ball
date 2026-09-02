@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Magic 8 Ball</title>
     <style>
-/* Base Styles & Lighter Background */
+        /* Base Styles & Lighter Background */
         body {
             margin: 0;
             padding: 0;
-            /* A soft slate-grey radial gradient */
             background: radial-gradient(circle at center, #eceff1 0%, #90a4ae 100%);
             color: #333333;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -56,13 +55,12 @@
             margin-bottom: 40px;
         }
 
-        /* Updated: Richer 3D Shadows for Light Background */
+        /* Richer 3D Shadows for Light Background */
         .eight-ball {
             width: 280px;
             height: 280px;
             background: radial-gradient(circle at 35% 25%, #444444, #050505 60%, #000000 100%);
             border-radius: 50%;
-            /* Softer inset shadow, much stronger drop shadow so it grounds the ball */
             box-shadow: inset -10px -10px 25px rgba(0,0,0,0.8), 15px 25px 40px rgba(0,0,0,0.5);
             display: flex;
             justify-content: center;
@@ -70,7 +68,7 @@
             position: relative;
         }
 
-        /* NEW: The Glossy Reflection Highlight */
+        /* The Glossy Reflection Highlight */
         .eight-ball::before {
             content: "";
             position: absolute;
@@ -79,10 +77,9 @@
             width: 130px;
             height: 65px;
             border-radius: 50%;
-            /* A semi-transparent white curve that fades out */
             background: linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.02));
             transform: rotate(-25deg);
-            pointer-events: none; /* Ensures the gloss doesn't block interactions */
+            pointer-events: none; 
             z-index: 2;
         }
 
@@ -125,13 +122,13 @@
             justify-content: center;
             align-items: center;
             position: absolute;
-            opacity: 0; /* Hidden by default */
+            opacity: 0; 
             transition: opacity 1.5s ease-in;
             padding: 10px;
             box-sizing: border-box;
         }
 
-        /* Updated Text Styles */
+        /* Glowing Blue Text Styles */
         .answer-text {
             color: #e3f2fd;
             text-align: center;
@@ -139,7 +136,6 @@
             font-weight: 700;
             line-height: 1.3;
             text-transform: uppercase;
-            /* Deep blue glow/shadow to replace the physical triangle */
             text-shadow: 
                 0px 2px 4px rgba(0,0,0,1), 
                 0px 0px 15px rgba(26, 35, 126, 1), 
@@ -159,6 +155,7 @@
             cursor: pointer;
             transition: transform 0.1s, box-shadow 0.1s;
             -webkit-tap-highlight-color: transparent;
+            z-index: 5;
         }
 
         .shake-btn:active {
@@ -171,6 +168,20 @@
             box-shadow: none;
             cursor: not-allowed;
             color: #aaa;
+        }
+
+        /* Initial Roll-in Animation */
+        .roll-in-anim {
+            animation: roll-in 1.2s cubic-bezier(0.21, 1.11, 0.81, 0.99) forwards;
+        }
+
+        @keyframes roll-in {
+            0% { 
+                transform: translateX(-120vw) rotate(-540deg); 
+            }
+            100% { 
+                transform: translateX(0) rotate(0deg); 
+            }
         }
 
         /* Shake Animation */
@@ -207,6 +218,7 @@
 
         .modal-content {
             background: #222222;
+            color: #dddddd;
             padding: 30px;
             border-radius: 12px;
             width: 85%;
@@ -222,7 +234,6 @@
 
         .modal-content p {
             line-height: 1.5;
-            color: #dddddd;
         }
 
         .close-btn {
@@ -244,7 +255,8 @@
     </div>
 
     <div class="ball-container">
-        <div class="eight-ball" id="magicBall">
+        <!-- Added roll-in-anim class here -->
+        <div class="eight-ball roll-in-anim" id="magicBall">
             <div class="window">
                 <div class="number-eight" id="numberEight">8</div>
                 <div class="answer-display" id="answerDisplay">
@@ -273,10 +285,8 @@
 
     <script>
         // --- CONFIGURATION ---
-        // Change this value to adjust how long the ball shakes (in milliseconds)
         const SHAKE_DURATION_MS = 1000; 
 
-        // The list of possible Magic 8 Ball answers
         const answers = [
             "It is certain",
             "It is decidedly so",
@@ -303,37 +313,36 @@
         // --- LOGIC ---
         const ball = document.getElementById('magicBall');
         const numberEight = document.getElementById('numberEight');
-        const answerDisplay = document.getElementById('answerDisplay'); // Renamed from triangle
+        const answerDisplay = document.getElementById('answerDisplay');
         const answerText = document.getElementById('answerText');
         const shakeBtn = document.getElementById('shakeBtn');
 
+        // Clean up roll-in class after load so it doesn't conflict with shaking
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                ball.classList.remove('roll-in-anim');
+            }, 1200); 
+        });
+
         function askQuestion() {
-            // 1. Disable button to prevent spamming
             shakeBtn.disabled = true;
             shakeBtn.innerText = "Consulting the spirits...";
 
-            // 2. Hide previous answer and show the '8' briefly
             answerDisplay.style.opacity = '0';
             setTimeout(() => {
                 numberEight.style.opacity = '1';
-                // 3. Start shaking animation
                 ball.classList.add('shaking');
-            }, 300); // Short delay to allow fade out
+            }, 300); 
 
-            // 4. Wait for the designated answer time (default 4 seconds)
             setTimeout(() => {
-                // Stop shaking
                 ball.classList.remove('shaking');
                 
-                // Pick a random answer
                 const randomIndex = Math.floor(Math.random() * answers.length);
                 answerText.innerText = answers[randomIndex];
 
-                // Fade out '8', Fade in answer
                 numberEight.style.opacity = '0';
                 answerDisplay.style.opacity = '1';
 
-                // Re-enable button
                 shakeBtn.disabled = false;
                 shakeBtn.innerText = "Ask Again";
 
@@ -350,7 +359,6 @@
             }
         }
 
-        // Close modal if user clicks outside the box
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 toggleModal(false);
